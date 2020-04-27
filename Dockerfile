@@ -76,7 +76,7 @@ RUN R -e "install.packages(c('shinydashboard','shiny','ggplot2','plotly','scales
 
 # Copy configuration files into the Docker image
 COPY shiny-server.conf  /etc/shiny-server/shiny-server.conf
-COPY /Regional_accounts /srv/shiny-server
+COPY /App /srv/shiny-server
 
 
 

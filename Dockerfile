@@ -6,6 +6,8 @@ ARG proxy_setting
 ENV http_proxy $proxy_setting
 ENV https_proxy $proxy_setting 
 
+ENV BROWSER "lynx"
+
 # Install Ubuntu packages
 RUN apt-get update && apt-get install -y \
     sudo \
@@ -17,41 +19,11 @@ RUN apt-get update && apt-get install -y \
     libxt-dev \
     libssl-dev \
     libxml2-dev \
-    cron 	
-# add addition system dependencies but suffixing \ <package name> on the end of the apt-get update & apt-get install -y command
-
-RUN apt-get update \
-  && apt-get install -y --no-install-recommends \
-    lbzip2 \
-    libfftw3-dev \
-    libgdal-dev \
-    libgeos-dev \
-    libgsl0-dev \
-    libgl1-mesa-dev \
-    libglu1-mesa-dev \
-    libhdf4-alt-dev \
-    libhdf5-dev \
-    libjq-dev \
-    liblwgeom-dev \
-    libpq-dev \
-    libproj-dev \
-    libprotobuf-dev \
-    libnetcdf-dev \
-    libsqlite3-dev \
-    libssl-dev \
-    libudunits2-dev \
-    netcdf-bin \
-    postgis \
-    protobuf-compiler \
-    sqlite3 \
-    tk-dev \
-    unixodbc-dev
+    cron \ 
+    xdg-utils \
+    lynx
     
-    RUN apt-get update \
-  && apt-get install -y --no-install-recommends \ 
-    libv8-dev \
-    libnode-dev \
-    libprotobuf-dev
+# add addition system dependencies but suffixing \ <package name> on the end of the apt-get update & apt-get install -y command
 
 # Download and install ShinyServer (latest version)
 RUN wget --no-verbose https://s3.amazonaws.com/rstudio-shiny-server-os-build/ubuntu-12.04/x86_64/VERSION -O "version.txt" && \
@@ -60,12 +32,7 @@ RUN wget --no-verbose https://s3.amazonaws.com/rstudio-shiny-server-os-build/ubu
     gdebi -n ss-latest.deb && \
     rm -f version.txt ss-latest.deb
 
- RUN apt-get update \
-  && apt-get install -y \ 
-    xdg-utils \
-    lynx
 
-ENV BROWSER "lynx"
 
 # Install R packages that are required!
 
@@ -76,7 +43,7 @@ RUN R -e "install.packages(c('shinydashboard','shiny','ggplot2','plotly','scales
 
 # Copy configuration files into the Docker image
 COPY shiny-server.conf  /etc/shiny-server/shiny-server.conf
-COPY /Regional_accounts /srv/shiny-server
+COPY /App /srv/shiny-server
 
 
 
